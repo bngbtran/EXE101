@@ -1,0 +1,196 @@
+﻿@model IEnumerable<NiceHouse.Models.Hotel>
+
+@{
+    ViewBag.Title = "Hotels";
+}
+
+<!-------------------------------------------------------------------->
+
+    <h2 class="text-center my-4 text-primary fw-bold">HOTEL LIST</h2>
+    <hr />
+
+    @using (Html.BeginForm("Index", "Search", FormMethod.Get))
+        {
+            <div class="form-row mb-4 align-items-center mt-3">
+                <div class="form-group col-md-3">
+                    <label for="location" class="fw-bold text-primary mb-2" style="margin-left:3px;">Location:</label>
+                    @Html.TextBox("location", null, new { @class = "form-control", @placeholder = "Location" })
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="minPrice" class="fw-bold text-primary mb-2" style="margin-left:4px;">Min Price:</label>
+                    @Html.TextBox("minPrice", null, new { @class = "form-control", @placeholder = "Min Price", type = "number", step = "0.01" })
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="maxPrice" class="fw-bold text-primary mb-2" style="margin-left:4px;">Max Price:</label>
+                    @Html.TextBox("maxPrice", null, new { @class = "form-control", @placeholder = "Max Price", type = "number", step = "0.01" })
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="hotelName" class="fw-bold text-primary mb-2" style="margin-left:3px;">Hotel Name:</label>
+                    @Html.TextBox("hotelName", null, new { @class = "form-control", @placeholder = "Hotel Name" })
+                </div>
+
+                <div class="form-group col-md-2 d-flex align-items-end">
+                    <input type="submit" value="Search" class="btn btn-primary btn-block mt-3" />
+                </div>
+            </div>
+        }
+
+<!-------------------------------------------------------------------->
+
+    <div class="row mt-5">
+        @foreach (var hotel in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100 border-0">
+                        @if (hotel.Images.Any())
+                            {
+                                <img src="@hotel.Images.First().ImageUrl" class="card-img-top rounded-top img-fluid hotel-image" alt="Image of @hotel.Name" />
+                            }
+
+                        <div class="card-body">
+                            <h5 class="card-title text-primary fw-bold">@hotel.Name</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">@hotel.Location</h6>
+                            <p class="card-text text-secondary">@hotel.Address</p>
+
+                            <p class="card-text">
+                                <span class="fw-bold text-secondary">
+                                    Price:</span>
+                                <span class="fw-bold text-success">
+                                    @String.Format("{0:N0} VNĐ", hotel.MinRoomPrice) - @String.Format("{0:N0} VNĐ", hotel.MaxRoomPrice)
+                                </span>
+                            </p>
+
+                            <a href="@Url.Action("Rooms", "Search", new { hotelId = hotel.Id })" class="btn btn-outline-primary btn-block mt-3">View Rooms</a>
+                        </div>
+                    </div>
+                </div>
+            }
+    </div>
+
+<!-------------------------------------------------------------------->
+
+    <style>
+        body 
+            {
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                background-color: #f8f9fa;
+                color: #343a40;
+                margin: 0;
+                padding: 0;
+            }
+
+        h2 
+            {
+                font-size: 2.5rem;
+                color: #007bff;
+            }
+
+        .card 
+            {
+                transition: transform 0.3s, box-shadow 0.3s;
+                border: 1px solid #dee2e6;
+                border-radius: 0.5rem;
+                overflow: hidden;
+            }
+
+        .card:hover 
+            {
+                transform: scale(1.05);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            }
+
+        .card-title 
+            {
+                font-size: 1.5rem;
+                color: #007bff;
+            }
+
+        .card-subtitle 
+            {
+                font-size: 1rem;
+                color: #6c757d;
+            }
+
+        .card-text 
+            {
+                font-size: 1rem;
+                color: #6c757d;
+            }
+
+        .form-control 
+            {
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                margin-bottom: 1rem;
+            }
+
+        .btn 
+            {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+        .btn-primary 
+            {
+                background-color: #007bff;
+                color: white;
+                border: none;
+            }
+
+        .btn-primary:hover 
+            {
+                background-color: #0056b3;
+                color: white;
+            }
+
+        .btn-outline-primary 
+            {
+                border-color: #007bff;
+                color: #007bff;
+            }
+
+        .btn-outline-primary:hover 
+            {
+                background-color: #007bff;
+                color: white;
+            }
+
+        .text-primary 
+            {
+                color: #007bff !important;
+            }
+
+        .text-secondary 
+            {
+                color: #6c757d !important;
+            }
+
+        .text-success 
+            {
+                color: #28a745 !important;
+            }
+
+        .form-row 
+            {
+                display: flex;
+                flex-wrap: wrap;
+                margin: -0.5rem;
+                margin-left: 45px;
+            }
+
+        .form-group 
+            {
+                padding: 0.5rem;
+            }
+
+        .hotel-image 
+            {
+                height: 200px;
+                object-fit: cover; 
+            }
+    </style>

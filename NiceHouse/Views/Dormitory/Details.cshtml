@@ -1,0 +1,77 @@
+﻿@model NiceHouse.Models.Dormitory
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<!-------------------------------------------------------------------->
+
+    <h1>Details</h1>
+
+    <div>
+        <h4>Dormitory</h4>
+        <hr />
+
+        <dl class="row">
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Type)
+            </dt>
+
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Type)
+            </dd>
+
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.MaxRoomPrice)
+            </dt>
+
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.MaxRoomPrice)
+            </dd>
+
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.MinRoomPrice)
+            </dt>
+
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.MinRoomPrice)
+            </dd>
+
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.NumberOfPeople)
+            </dt>
+
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.NumberOfPeople)
+            </dd>
+        </dl>
+    </div>
+
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>

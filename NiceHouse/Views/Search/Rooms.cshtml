@@ -1,0 +1,248 @@
+﻿@model IEnumerable<NiceHouse.Models.Room>
+
+@{
+    ViewBag.Title = "Search Rooms";
+    var hotelId = ViewBag.HotelId;
+}
+
+<!-------------------------------------------------------------------->
+
+    <h2 class="text-center my-4 text-primary fw-bold">ROOMS</h2>
+    <hr />
+
+    <div class="row mt-4">
+        @foreach (var room in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100 border-0">
+                        @if (room.RoomType.Images != null && room.RoomType.Images.Any())
+                            {
+                                <img src="@room.RoomType.Images.First().ImageUrl" class="card-img-top rounded-top img-fluid fixed-img-size" alt="Room Image" />
+                            }
+
+                        <div class="card-body">
+                            <h5 class="card-title text-primary fw-bold">@room.RoomType.Name</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">@room.Hotel.Name</h6>
+
+                            <p class="fw-bold text-secondary">
+                                Price:
+                                <span class="text-success">
+                                    @String.Format("{0:N0} VNĐ", room.RoomType.Price)
+                                </span>
+                            </p>
+
+                            <p class="fw-bold text-secondary">Number of Beds: <span class="fw-bold text-success">@room.RoomType.NumberOfBeds</span></p>
+                            <button class="btn btn-outline-primary btn-block mt-2" onclick="showBookingForm('@room.Id')">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            }
+    </div>
+
+<!-------------------------------------------------------------------->
+
+    <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title fw-bold text-center" id="bookingModalLabel">Booking Form</h4>
+
+                </div>
+
+                <div class="modal-body">
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label for="fullName" class="fw-bold text-primary mb-3">Full Name:</label>
+                            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phoneNumber" class="fw-bold text-primary mb-3">Phone Number:</label>
+                            <input type="number" class="form-control" id="phoneNumber" placeholder="Enter your phone number">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal" onclick="closeBookingForm()">Close</button>
+                    <button type="button" class="btn btn-outline-success" onclick="confirmBooking()">Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-------------------------------------------------------------------->
+
+    @section scripts 
+        {
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+            <script>
+                function showBookingForm(roomId) 
+                    {
+                        $('#bookingModal').modal('show');
+                        $('#roomId').val(roomId);
+                    }
+
+                function closeBookingForm() 
+                    {
+                        $('#bookingModal').modal('hide');
+                    }
+
+                function confirmBooking() 
+                    {
+                        var fullName = $('#fullName').val();
+                        var phoneNumber = $('#phoneNumber').val();
+                        var roomId = $('#roomId').val();
+
+                        closeBookingForm();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Booking Successfully !!!',
+                            text: 'Thank you for using NiceHouse',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#007bff'
+                        });
+                    }
+            </script>
+        }
+
+<!-------------------------------------------------------------------->
+
+    <style>
+        body 
+            {
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                background-color: #f8f9fa;
+                color: #343a40;
+                margin: 0;
+                padding: 0;
+            }
+
+        h2 
+            {
+                font-size: 2.5rem;
+                color: #007bff;
+            }
+
+        .card 
+            {
+                transition: transform 0.3s, box-shadow 0.3s;
+                border: 1px solid #dee2e6;
+                border-radius: 0.5rem;
+                overflow: hidden;
+            }
+
+        .card:hover 
+            {
+                transform: scale(1.05);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            }
+
+        .card-title 
+            {
+                font-size: 1.5rem;
+                color: #007bff;
+            }
+
+        .card-subtitle 
+            {
+                font-size: 1rem;
+                color: #6c757d;
+            }
+
+        .card-text
+            {
+                font-size: 1rem;
+                color: #6c757d;
+            }
+
+        .form-control 
+            {
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                margin-bottom: 1rem;
+            }
+
+        .btn 
+            {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+        .btn-primary 
+            {
+                background-color: #007bff;
+                color: white;
+                border: none;
+            }
+
+        .btn-primary:hover 
+            {
+                background-color: #0056b3;
+                color: white;
+            }
+
+        .btn-outline-primary 
+            {
+                border-color: #007bff;
+                color: #007bff;
+            }
+
+        .btn-outline-primary:hover 
+            {
+                background-color: #007bff;
+                color: white;
+            }
+
+        .text-primary 
+            {
+                color: #007bff !important;
+            }
+
+        .text-secondary 
+            {
+                color: #6c757d !important;
+            }
+
+        .text-success 
+            {
+                color: #28a745 !important;
+            }
+
+        .form-row 
+            {
+                display: flex;
+                flex-wrap: wrap;
+                margin: -0.5rem;
+                margin-left: 45px;
+            }
+
+        .form-group 
+            {
+                padding: 0.5rem;
+            }
+
+        .modal-title 
+            {
+                color: white;
+            }
+
+        .modal-header 
+            {
+                background-color: #007bff;
+            }
+
+        .modal-dialog 
+            {
+                border-radius: 10px;
+            }
+
+        .fixed-img-size 
+            {
+                height: 200px;
+                object-fit: cover;
+            }
+    </style>

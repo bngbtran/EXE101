@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NiceHouse - @ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/NiceHouse.styles.css" asp-append-version="true" />
+
+    <style>
+        body 
+            {
+                font-family: 'Roboto', sans-serif;
+                background-color: #f4f6f9;
+                color: #333;
+                margin: 0;
+                padding: 0;
+            }
+
+        header 
+            {
+                background-color: #fff;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+            }
+
+        .navbar-brand 
+            {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #007bff;
+                margin-left: 160px;
+            }
+
+        .nav-link 
+            {
+                color: #555;
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+            }
+
+        .nav-link:hover 
+            {
+                color: #007bff;
+            }
+
+        .container 
+            {
+                max-width: 1200px;
+                margin: auto;
+                padding: 0 15px;
+            }
+
+        main 
+            {
+                background-color: #fff;
+                padding: 20px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+            }     
+    </style>
+</head>
+
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light">
+                <div class="container-fluid">
+                    <a class="navbar-brand fw-bold" style="color: #007bff" asp-area="" asp-controller="Search" asp-action="Index">NiceHouse</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-secondary" asp-area="" asp-controller="Search" asp-action="Index">Hotels</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-secondary" asp-area="" asp-controller="Dormitory" asp-action="Index">Dormitories</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+
+<!-------------------------------------------------------------------->
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </body>
+
+</html>

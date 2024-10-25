@@ -1,0 +1,155 @@
+﻿@model IEnumerable<NiceHouse.Models.RoomType>
+
+@{
+    ViewBag.Title = "Room Types";
+}
+
+<!-------------------------------------------------------------------->
+
+    <h2 class="text-center my-4 text-primary fw-bold">ROOM TYPES</h2>
+    <hr />
+
+    <div class="row mt-4">
+        @foreach (var roomType in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100 border-0">
+                        @if (roomType.Images.Any())
+                            {
+                                <img src="@roomType.Images.First().ImageUrl" class="card-img-top rounded-top room-type-image" alt="Room Type Image" />
+                            }
+
+                        <div class="card-body">
+                            <h5 class="card-title text-primary fw-bold">@roomType.Name</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Hotel: @roomType.Hotel.Name</h6>
+                            <p class="fw-bold text-success">Price: $@roomType.Price</p>
+                            <p class="fw-bold text-secondary">Number of Beds: @roomType.NumberOfBeds</p>
+                        </div>
+                    </div>
+                </div>
+            }
+    </div>
+
+<!-------------------------------------------------------------------->
+
+    <style>
+        body 
+            {
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                background-color: #f8f9fa;
+                color: #343a40;
+                margin: 0;
+                padding: 0;
+            }
+
+        h2 
+            {
+                font-size: 2.5rem;
+                color: #007bff;
+            }
+
+        .card 
+            {
+                transition: transform 0.3s, box-shadow 0.3s;
+                border: 1px solid #dee2e6;
+                border-radius: 0.5rem;
+                overflow: hidden;
+            }
+
+        .card:hover 
+            {
+                transform: scale(1.05);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            }
+
+        .card-title 
+            {
+                font-size: 1.5rem;
+                color: #007bff;
+            }
+
+        .card-subtitle 
+            {
+                font-size: 1rem;
+                color: #6c757d;
+            }
+
+        .card-text 
+            {
+                font-size: 1rem;
+                color: #6c757d;
+            }
+
+        .form-control 
+            {
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                margin-bottom: 1rem;
+            }
+
+        .btn 
+            {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+        .btn-primary 
+            {
+                background-color: #007bff;
+                color: white;
+                border: none;
+            }
+
+        .btn-primary:hover 
+            {
+                background-color: #0056b3;
+                color: white;
+            }
+
+        .btn-outline-primary 
+            {
+                border-color: #007bff;
+                color: #007bff;
+            }
+
+        .btn-outline-primary:hover 
+            {
+                background-color: #007bff;
+                color: white;
+            }
+
+        .text-primary 
+            {
+                color: #007bff !important;
+            }
+
+        .text-secondary 
+            {
+                color: #6c757d !important;
+            }
+
+        .text-success 
+            {
+                color: #28a745 !important;
+            }
+
+        .form-row 
+            {
+                display: flex;
+                flex-wrap: wrap;
+                margin: -0.5rem;
+            }
+
+        .form-group 
+            {
+                padding: 0.5rem;
+            }
+
+        .room-type-image 
+            {
+                height: 200px;
+                object-fit: cover;
+            }
+    </style>

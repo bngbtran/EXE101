@@ -1,0 +1,351 @@
+﻿@model IEnumerable<NiceHouse.Models.Dormitory>
+
+@{
+    ViewData["Title"] = "Dormitories";
+}
+
+<!-------------------------------------------------------------------->
+
+    <h2 class="text-center my-4 text-primary fw-bold">DORMITORY LIST</h2>
+    <hr />
+
+    @using (Html.BeginForm("Index", "Dormitory", FormMethod.Get))
+        {
+            <div class="form-row mb-4 align-items-center mt-3">
+                <div class="form-group col-md-2">
+                    <label for="address" class="fw-bold text-primary mb-2" style="margin-left: 3px;">Location:</label>
+                    @Html.TextBox("address", null, new { @class = "form-control", @placeholder = "Location" })
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="name" class="fw-bold text-primary mb-2" style="margin-left: 3px;">Dormitory Name:</label>
+                    @Html.TextBox("name", null, new { @class = "form-control", @placeholder = "Dormitory Name" })
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="minPrice" class="fw-bold text-primary mb-2" style="margin-left: 4px;">Min Price:</label>
+                    @Html.TextBox("minPrice", null, new { @class = "form-control", @placeholder = "Min Price" })
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="maxPrice" class="fw-bold text-primary mb-2" style="margin-left: 4px;">Max Price:</label>
+                    @Html.TextBox("maxPrice", null, new { @class = "form-control", @placeholder = "Max Price" })
+                </div>
+
+                <div class="form-group col-md-2">
+                    <label for="type" class="fw-bold text-primary mb-2" style="margin-left: 2px;">Type:</label>
+                    @Html.DropDownList("type", new SelectList(new[]
+                        {
+                            new { Value = "HighEndApartment", Text = "Nhà trọ cao cấp" },
+                            new { Value = "SocialHousing", Text = "Nhà ở xã hội" },
+                            new { Value = "AffordableDormitory", Text = "Ký túc xá giá rẻ" }
+                        }, "Value", "Text"), "Chọn loại", new { @class = "form-control" })
+                </div>
+
+                <div class="form-group col-md-2 d-flex align-items-end">
+                    <input type="submit" value="Search" class="btn btn-primary btn-block submit_btn" />
+                </div>
+            </div>
+        }
+
+<!-------------------------------------------------------------------->
+
+    <div class="row mt-5">
+        @foreach (var item in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100 border-0">
+                        @if (item.Images != null && item.Images.Any())
+                            {
+                                <div class="image-container">
+                                    <img src="@item.Images.First().Url" class="card-img-top img-fluid" alt="Image of @item.Name" />
+                                </div>
+                            }
+                        <div class="card-body">
+                            <h5 class="card-title text-primary fw-bold mt-3">@item.Name</h5>
+
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                @{
+                                    string typeName;
+                                    switch (item.Type)
+                                        {
+                                            case DormitoryType.HighEndApartment:
+                                                typeName = "Nhà trọ cao cấp";
+                                                break;
+
+                                            case DormitoryType.SocialHousing:
+                                                typeName = "Nhà ở xã hội";
+                                                break;
+
+                                            case DormitoryType.AffordableDormitory:
+                                                typeName = "Ký túc xá giá rẻ";
+                                                break;
+
+                                            default:
+                                                typeName = "Chưa xác định";
+                                                break;
+                                        }
+                                }
+                                @typeName
+                            </h6>
+
+                            <p class="card-text text-secondary">@item.Address</p>
+
+                            <p class="card-text">
+                                <span class="fw-bold text-secondary">Price:</span>
+                                <span class="fw-bold text-success">
+                                    @String.Format("{0:N0} VNĐ", item.MinRoomPrice) - @String.Format("{0:N0} VNĐ", item.MaxRoomPrice)
+                                </span>
+                            </p>
+
+                            <p class="card-text fw-bold text-secondary">Number of People: <span class="fw-bold text-success">@item.NumberOfPeople</span></p>
+
+                            <button class="btn btn-outline-primary btn-block mt-2" onclick="showBookingForm('@item.Id')">Book Now</button>
+                        </div>
+                    </div>
+                </div>
+            }
+    </div>
+
+<!-------------------------------------------------------------------->
+
+    <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title fw-bold text-center" id="bookingModalLabel">Booking Form</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label for="fullName" class="fw-bold text-primary mb-3">Full Name:</label>
+                            <input type="text" class="form-control" id="fullName" placeholder="Enter your full name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phoneNumber" class="fw-bold text-primary mb-3">Phone Number:</label>
+                            <input type="number" class="form-control" id="phoneNumber" placeholder="Enter your phone number">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="numberOfPeople" class="fw-bold text-primary mb-3">Number Of People:</label>
+                            <input type="number" class="form-control" id="numberOfPeople" placeholder="Enter your crew">
+                        </div>
+
+                        <input type="hidden" id="dormId">
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal" onclick="closeBookingForm()">Close</button>
+                    <button type="button" class="btn btn-outline-success" onclick="confirmBooking()">Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-------------------------------------------------------------------->
+
+    @section scripts 
+        {
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+            <script>
+                function showBookingForm(dormId) 
+                    {
+                        $('#bookingModal').modal('show');
+                        $('#dormId').val(dormId);
+                    }
+
+                function closeBookingForm() 
+                    {
+                        $('#bookingModal').modal('hide');
+                    }
+
+                function confirmBooking() 
+                    {
+                        var fullName = $('#fullName').val();
+                        var phoneNumber = $('#phoneNumber').val();
+                        var dormId = $('#dormId').val();
+
+                        closeBookingForm();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Booking Successfully !!!',
+                            text: 'Thank you for using NiceHouse',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#007bff'
+                        });
+                    }
+            </script>
+        }
+
+<!-------------------------------------------------------------------->
+
+    <style>
+        body 
+            {
+                font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                background-color: #f8f9fa;
+                color: #343a40;
+                margin: 0;
+                padding: 0;
+            }
+
+        h2 
+            {
+                font-size: 2.5rem;
+                color: #007bff;
+            }
+
+        .card 
+            {
+                transition: transform 0.3s, box-shadow 0.3s;
+                border: 1px solid #dee2e6;
+                border-radius: 0.5rem;
+                overflow: hidden;
+            }
+
+        .card:hover 
+            {
+                transform: scale(1.05);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            }
+
+        .card-title 
+            {
+                font-size: 1.5rem;
+                color: #007bff;
+            }
+
+        .card-subtitle 
+            {
+                font-size: 1rem;
+                color: #6c757d;
+            }
+
+        .card-text 
+            {
+                font-size: 1rem;
+                color: #6c757d;
+            }
+
+        .form-control 
+            {
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                margin-bottom: 1rem;
+            }
+
+        .btn 
+            {
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+        .btn-primary 
+            {
+                background-color: #007bff;
+                color: white;
+                border: none;
+            }
+
+        .btn-primary:hover 
+            {
+                background-color: #0056b3;
+                color: white;
+            }
+
+        .btn-outline-primary 
+            {
+                border-color: #007bff;
+                color: #007bff;
+            }
+
+        .btn-outline-primary:hover 
+            {
+                background-color: #007bff;
+                color: white;
+            }
+
+        .text-primary 
+            {
+                color: #007bff !important;
+            }
+
+        .text-secondary 
+            {
+                color: #6c757d !important;
+            }
+
+        .text-success 
+            {
+                color: #28a745 !important;
+            }
+
+        .form-row 
+            {
+                display: flex;
+                flex-wrap: wrap;
+                margin: -0.5rem;
+                margin-left: 45px;
+            }
+
+        .form-group 
+            {
+                padding: 0.5rem;
+            }
+
+        .form-group.col-md-2 
+            {
+                max-width: 20%;
+            }
+
+        .submit_btn 
+            {
+                margin-top: 15px;
+            }
+
+        .carousel-item 
+            {
+                height: 200px;
+            }
+
+        .carousel-item img 
+            {
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .modal-title 
+            {
+                color: white;
+            }
+
+        .modal-header 
+            {
+                background-color: #007bff;
+            }
+
+        .modal-dialog 
+            {
+                border-radius: 10px;
+            }
+
+        .image-container 
+            {
+                width: 100%;
+                height: 200px;
+                overflow: hidden;
+            }
+
+        .image-container img 
+            {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+    </style>
